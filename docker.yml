@@ -1,0 +1,72 @@
+---
+config:
+  environment.LANG: "en_US.UTF-8"
+  environment.LANGUAGE: "en_US:en"
+  environment.LC_ALL: "en_US.UTF-8"
+  linux.kernel_modules: ip_tables,overlay
+  security.nesting: "true"
+  security.privileged: "false"
+  user.user-data: |
+    #cloud-config
+    output:
+      all: '| tee -a /var/log/cloud-init-output.log'
+    package_update: true
+    package_upgrade: true
+    runcmd:
+      - set -xe
+      - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+      - apt-get install -y apt-transport-https curl
+      - add-apt-repository
+        "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+      - apt-get update
+      - apt-get install -y
+        docker-ce
+        docker-compose
+        vim
+        git
+        squashfuse
+      - systemctl start docker
+      - docker image pull hello-world
+      - docker run hello-world
+    write_files:
+      - path: /etc/rsylog.conf
+        content: |
+          module(load="imuxsock")
+          *.* @log.virtdmz
+        owner: root:root
+        permissions: '0644'
+      - path: /etc/docker/daemon.json
+        content: |
+          {
+            "hosts": [
+                "fd://",
+                "tcp://0.0.0.0:2345"
+            ],
+            "storage-driver": "overlay"
+          }
+        permissions: '0644'
+        owner: root:root
+      - path: /etc/systemd/system/docker.service.d/override.conf
+        content: |
+          [Service]
+          ExecStart=
+          ExecStart=/usr/bin/dockerd
+        permissions: '0644'
+        owner: root:root
+    users:
+      - name: rferguson
+        groups:
+          - adm
+          - sudo
+        lock_passwd: true
+        shell: /bin/bash
+        ssh-authorized-keys:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPS4YhPW5BkRbYkazwX7s0bFcFefVv30
+            l5qXA0oxWKxM3vlN8eAinmU8ejZ7PgdpzLLnhgm3Kt8HrLYdWzYjoRCeF9Fp+fMcU8KL7I
+            s4KOrCSPKodHOIlV3AtqmNtb9zTwiwCHqPkY9JeaWfiXe2c675jOA5ZkMsaHuaEjbqCYgd
+            I6boQJI7S/haPFzWDr/rbkijjw87t9nh3NP1Oy11QDqavqzjURyika1eBsHKAheBHkVUgt
+            oUu43rMsGLjL/gyD5XNJntdSuENYWH rferguson@booger
+        sudo:
+          - ALL=(ALL) NOPASSWD:ALL
+description: Docker instance config.
+
