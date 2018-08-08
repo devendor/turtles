@@ -48,8 +48,8 @@ This approach should work on any combination of private and public cloud options
 allow deeper continuous deployment and automation and further decouple solutions from platforms.
 
 
-:index:`LVM Pool with Overlay Docker Graph Storage`
----------------------------------------------------
+LVM Pool with Overlay Docker Graph Storage
+------------------------------------------
 
 Target Host Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -411,8 +411,8 @@ disk on /dev/sdb.
       Cloud-init v. 18.2 running 'modules:final' at Mon, 06 Aug 2018 20:20:24 +0000. Up 11.00 seconds.
       Cloud-init v. 18.2 finished at Mon, 06 Aug 2018 20:21:40 +0000. Datasource DataSourceNoCloud [seed=/var/lib/cloud/seed/nocloud-net][dsmode=net].  Up 87.00 seconds
 
-:index:`BTRFS LXD Pool with BTRFS Docker Graph Storage`
--------------------------------------------------------
+BTRFS LXD Pool with BTRFS Docker Graph Storage
+----------------------------------------------
 
 Target Host Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -560,8 +560,8 @@ Working with the container
 
 The examples below start with the btrfs docker guest setup in the steps above.
 
-:index:`LXD Proxy Devices`
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+LXD Proxy Devices
+~~~~~~~~~~~~~~~~~
 
 `LXD proxy devices`_ allow you to expose container connections through the host OS.  The example
 below shows the protocol translation feature by forwarding between a unix socket on the host to a
@@ -618,8 +618,8 @@ steps below just tell the local resolver to use the dnsmasq instance for resolut
       64 bytes from dkr002.lxd (fd42:a35c:c565:bb31:216:3eff:fec4:3a26): icmp_seq=1 ttl=64 time=0.058 ms
       64 bytes from dkr002.lxd (fd42:a35c:c565:bb31:216:3eff:fec4:3a26): icmp_seq=2 ttl=64 time=0.076 ms
 
-:index:`Using persistent lxd data volumes`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using persistent lxd data volumes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The myData volume created below persists even when we delete the LXD container it's attached to
 and can be used to persist data on ephemeral LXD guests or even ephemeral Docker guests in
@@ -668,8 +668,8 @@ You can also pass block devices or bind mounts into the container directly.
 
       postgres=# ^D
 
-:index:`Exploring the namespaces`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Exploring the namespaces
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Direct namespace exploration and manipulation is one area that is extremely useful, but seldom
 covered as it falls outside the envelope of the container systems built on top of kernel namespaces.
@@ -736,8 +736,8 @@ covered as it falls outside the envelope of the container systems built on top o
 Note that lsns COMMAND and PID output is just the lowest PID in the namespace and doesn't represent
 where the namespace started.
 
-:index:`Snap namespaces`
-~~~~~~~~~~~~~~~~~~~~~~~~
+Snap namespaces
+~~~~~~~~~~~~~~~
 
 The lxd application is running in it's own mount namespace within snap.
 
@@ -806,8 +806,8 @@ The snap container uses the squashfs snap-core image as it's rootfs.  This corre
       root@instance-2:/# grep " / " /proc/mounts
       /dev/loop1 / squashfs ro,nodev,relatime 0 0
 
-:index:`Snap and LVM Thinpools`
--------------------------------
+Snap and LVM Thinpools
+----------------------
 
 .. todo:: Figure out interaction between lvm_thinpool autoextend and snap mountns.
 
@@ -847,8 +847,8 @@ in corruption.
 Miscelaneous Tips
 -----------------
 
-:index:`Cloud-init in LXD Guests`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Cloud-init in LXD Guests
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 When working with cloud-init, the key config->user.user-data one large string that contains a
 second yaml document written to the cloud-init seed files via template in the lxd image. The
@@ -885,8 +885,8 @@ I also recommend working from a file, and pushing your edits with
 trailing space can cause lxc show to displace your embedded template as an escaped double quoted
 string.  Extracting the user-data with yaml2json and passing it through yamllint will help.
 
-:index:`LXD files of interest`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+LXD files of interest
+~~~~~~~~~~~~~~~~~~~~~
 
 Several files are generated that can be useful thought they should not be edited directly.
 
