@@ -1,7 +1,7 @@
 Turtles All the Way Down: Docker in LXD Guests in a Snap
 ========================================================
 
-`turtles on github`_
+`turtles on devendortech.com`_
 
 The state of container technology has evolved considerably since Stéphane Graber's `article
 regarding Docker in LXD`_ over two years ago.  It served as a good but dated introduction to the
@@ -935,5 +935,5 @@ Several files are generated that can be useful thought they should not be edited
 .. _lxc_container.conf: https://linuxcontainers.org/lxc/manpages//man5/lxc.container.conf.5.html
 .. _automatic extension: http://man7.org/linux/man-pages/man7/lvmthin.7.html#Thin_Topics
 .. _instance type definitions: https://github.com/lxc/lxd/blob/master/doc/containers.md#instance-types
-.. _turtles on github: https://github.com/devendor/turtles.git
+.. _turtles on devendortech.com: https://www.devendortech.com/articles/Docker_in_LXD_Guest.html
 
