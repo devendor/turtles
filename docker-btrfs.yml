@@ -3,7 +3,7 @@ config:
   environment.LANG: "en_US.UTF-8"
   environment.LANGUAGE: "en_US:en"
   environment.LC_ALL: "en_US.UTF-8"
-  linux.kernel_modules: ip_tables,overlay
+  linux.kernel_modules: ip_tables,btrfs
   security.nesting: "true"
   security.privileged: "false"
   user.user-data: |
@@ -42,7 +42,7 @@ config:
                 "fd://",
                 "tcp://0.0.0.0:2345"
             ],
-            "storage-driver": "overlay"
+            "storage-driver": "btrfs"
           }
         permissions: '0644'
         owner: root:root
