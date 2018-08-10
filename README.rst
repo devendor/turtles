@@ -1,3 +1,5 @@
+.. Masks :index: role defined in sphinx but not github or docutils.
+
 .. role:: index(raw)
    :format: html
 
