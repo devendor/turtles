@@ -61,11 +61,11 @@ config:
         lock_passwd: true
         shell: /bin/bash
         ssh-authorized-keys:
-          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPS4YhPW5BkRbYkazwX7s0bFcFefVv30
-            l5qXA0oxWKxM3vlN8eAinmU8ejZ7PgdpzLLnhgm3Kt8HrLYdWzYjoRCeF9Fp+fMcU8KL7I
-            s4KOrCSPKodHOIlV3AtqmNtb9zTwiwCHqPkY9JeaWfiXe2c675jOA5ZkMsaHuaEjbqCYgd
-            I6boQJI7S/haPFzWDr/rbkijjw87t9nh3NP1Oy11QDqavqzjURyika1eBsHKAheBHkVUgt
-            oUu43rMsGLjL/gyD5XNJntdSuENYWH rferguson@booger
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPS4YhPW5BkRbYkazwX7s0bFcFefVv30\
+            l5qXA0oxWKxM3vlN8eAinmU8ejZ7PgdpzLLnhgm3Kt8HrLYdWzYjoRCeF9Fp+fMcU8KL7I\
+            s4KOrCSPKodHOIlV3AtqmNtb9zTwiwCHqPkY9JeaWfiXe2c675jOA5ZkMsaHuaEjbqCYgd\
+            I6boQJI7S/haPFzWDr/rbkijjw87t9nh3NP1Oy11QDqavqzjURyika1eBsHKAheBHkVUgt\
+            oUu43rMsGLjL/gyD5XNJntdSuENYWH rferguson@booger"
         sudo:
           - ALL=(ALL) NOPASSWD:ALL
 description: Docker instance config.
