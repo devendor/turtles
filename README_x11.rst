@@ -8,13 +8,21 @@ LXD profile with nested docker and accelerated GPU support for JetBrains toolbox
 Why?
 ----
 
-There are certainly more use cases for this type of container, but in my case, I'm using it to contain development environments without losing the advantages of direct access to runtime system from advanced tools like `pycharm`_ or `Idea`_.
+There are certainly more use cases for this type of container, but in my case, I'm using it to
+contain development environments without losing the advantages of direct access to
+runtime system from advanced tools like `pycharm`_ or `Idea`_.
 
-There are certainly other approaches to the issue of getting an advanced IDE in the same process space as your running app including remote debugging and various IDEs that have moved toward a client server models or brower model instead of a direct GUI application. I find the latter to be a great idea, but I don't like to waste time figuring out new IDEs with usually more limited language support and very different UI designs.
+There are certainly other approaches to the issue of getting an advanced IDE in the same process
+space as your running app including remote debugging and various IDEs that have moved toward
+client server models or a browser model instead of a direct GUI application. I like those ideas,
+but I don't like to waste time figuring out new IDEs with usually more limited language support
+and very different UI designs.
 
-For my money, jetbrains gives me a consistent layout and functionality accross all of the languages I currently program in with deep support in each language.  The trade off is often remote debugging or contaminating your workstation with development jobs that come and go.
+For my money, jetbrains gives me a consistent layout and functionality accross all of the languages
+I currently program in with deep support in each language. The trade off is often remote debugging
+or contaminating your workstation with development jobs that come and go.
 
-This approach eliminates most of the drawbacks and keeps things clean and safe.
+This approach eliminates most of those issues and keeps things clean and safe.
 
 Priors
 ------
