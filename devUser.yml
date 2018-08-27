@@ -1,0 +1,127 @@
+name: devUser
+description: LXD profile with nested docker and accellerated GPU support for JetBrains toolbox.
+config:
+  environment.LANG: en_US.UTF-8
+  environment.LANGUAGE: en_US:en
+  environment.DISPLAY: :0.0
+  environment.XAUTHORITY: /home/me/.Xauthority 
+  nvidia.runtime: "true"  # TODO only if you have an nvidia GPU.
+  raw.idmap: |  # TODO Set your UID/GID
+    both 1000 1000
+  linux.kernel_modules: ip_tables,btrfs
+  security.nesting: "true"
+  security.privileged: "false"
+  user.user-data: |-
+    #cloud-config
+    output:
+      all: '| tee -a /var/log/cloud-init-output.log'
+    package_update: true
+    package_upgrade: true
+    runcmd:
+      - set -xe
+      - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+      - apt-get install -y apt-transport-https curl
+      - add-apt-repository
+        "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+      - apt-get update
+      - apt-get install -y
+        docker-ce
+        docker-compose
+        vim
+        git
+        squashfuse
+      - usermod -aG docker me
+      - systemctl start docker
+      - docker image pull hello-world
+      - docker run --rm hello-world
+      - apt-get install -y
+        x11-apps
+        mesa-utils
+        alsa-utils
+        libxtst6
+        libgtk-3-common
+        libswt-gtk-3-java
+        libnvidia-gl-390  # TODO validate appropriate gl library for your env.
+      - "export DISPLAY=:0.0 XAUTHORITY=/home/me/.Xauthority"
+      - nvidia-smi
+      - runuser me -c "glxinfo -B"
+      - runuser me -c "glxgears -info" &
+      - sleep 12
+      - killall glxgears
+    write_files:
+      - path: /etc/rsylog.conf
+        content: |
+          module(load="imuxsock")
+          *.* @log.virtdmz
+        owner: root:root
+        permissions: '0644'
+      - path: /etc/docker/daemon.json
+        content: |
+          {
+            "hosts": [
+                "fd://",
+                "tcp://0.0.0.0:2345"
+            ],
+            "storage-driver": "btrfs"
+          }
+        permissions: '0644'
+        owner: root:root
+      - path: /etc/systemd/system/docker.service.d/override.conf
+        content: |
+          [Service]
+          ExecStart=
+          ExecStart=/usr/bin/dockerd
+        permissions: '0644'
+        owner: root:root
+      - path: /bin/pycharm
+        permissions: '0755'
+        owner: root:root  # TODO Check your install path.
+        content: "\
+          #!/bin/bash\n\
+          exec $( ls -1c ~/.local/share/JetBrains/Toolbox/apps/\
+          PyCharm-P/ch-0/*/bin/pycharm.sh | head -1) $@\n"
+    users:
+      - name: me
+        groups:
+          - adm
+        lock_passwd: true
+        shell: /bin/bash
+        uid: 1000  # TODO Swap to your numeric UID/GID
+        gid: 1000
+        ssh-authorized-keys:  # TODO Add your own keys
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPS4YhPW5BkRbYkazwX7s0bFcFefVv30\
+            l5qXA0oxWKxM3vlN8eAinmU8ejZ7PgdpzLLnhgm3Kt8HrLYdWzYjoRCeF9Fp+fMcU8KL7I\
+            s4KOrCSPKodHOIlV3AtqmNtb9zTwiwCHqPkY9JeaWfiXe2c675jOA5ZkMsaHuaEjbqCYgd\
+            I6boQJI7S/haPFzWDr/rbkijjw87t9nh3NP1Oy11QDqavqzjURyika1eBsHKAheBHkVUgt\
+            oUu43rMsGLjL/gyD5XNJntdSuENYWH rferguson@booger"
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8hW43gyNrayfJwjxZ80HKWboRvpDRnS\
+            LhEKGwDfBqfx5aaF67mmIhOE+fsUTed1Odoqo5iprQYEWoTSA6C2RX9G9BBoUVCiA7DMIf\
+            dBTfJ5G3mO1I8ZZazttQ2qp5/e9z4mpYzL410YZyZ6XrgWoazQpDGdb2pkSmADo8jc/rED\
+            yM+ZWRBNDOS4gxUPk5oy8HbpZmK380JYvvGNSZCj4QSe5IZa/bQx6NL88mEF/+BHEW6JFw\
+            +Awv7c1+GHDL5iYQnTAY+XG1BQdDwuziRFm8eWPYamgUd+4JKptcf1gW6W1EnIQ2i4OR2L\
+            R1/BIXwG0FMfs3gJlM1Wbh/giYSt8p rferguson@mendota"
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCg51sNuYolkEw52oIKw3OKzlso2UyS0h\
+            0+R9t5wQYGMk6SfS0PHFd6epwWP1aHnJJnyLIZGPB/qaiWz4dTJEhl5eRaBO0ca6/SbMCu\
+            wjCCE/6IMPphj79v14hXfOG42dF/wZN3AF2VJwI3xVcxAyEkEIgAb79X4wUO2nN6xli5ET\
+            Q+YxPVfxD8+A0B1p25Ef1NdnUdGHOBCkpV4rgcO2fLQHIspMlL/JDJ9CUyCvy5XM7elN37\
+            iOdEUysGCavTcA0MeUxjkFdyzJt+MNVve4t+hOF6p/HnIvhcGxME6CQRyX3rM5bPbWy1ER\
+            e7BXJmg4SZmG5QccaTzqcCBJyFTJDX rferguson@c302ca"
+        sudo:
+          - ALL=(ALL) NOPASSWD:ALL
+devices:  # TODO Swap in your home dir path.
+  Xauthority:
+    path: /home/me/.Xauthority
+    source: /home/rferguson/.Xauthority
+    type: disk
+  nvgpu:
+    type: gpu
+    uid: "0"
+    gid: "0"
+  x11:
+    path: /tmp/.X11-unix/X0
+    source: /tmp/.X11-unix/X0
+    type: disk
+  melocal:
+    source: /home/rferguson/.local
+    path: /home/me/.local
+    type: disk
