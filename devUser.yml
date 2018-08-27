@@ -1,5 +1,5 @@
 name: devUser
-description: LXD profile with nested docker and accellerated GPU support for JetBrains toolbox.
+description: LXD profile with nested docker and accelerated GPU support for JetBrains toolbox.
 config:
   environment.LANG: en_US.UTF-8
   environment.LANGUAGE: en_US:en

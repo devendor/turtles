@@ -1,7 +1,7 @@
-Userns LXD, nested Docker, and accellerated passthrough graphics
-================================================================
+Userns LXD, nested Docker, and accellerated GPU graphics
+========================================================
 
-LXD profile with nested docker and accellerated GPU support for JetBrains toolbox.
+LXD profile with nested docker and accelerated GPU support for JetBrains toolbox.
 
 `Prettier`_, `github`_, `medium`_.
 
@@ -99,12 +99,12 @@ Happy coding!
 devUser.yml Profile
 -------------------
 
-.. note:: Checkout the github version as this is unmaintained.
+.. note:: Checkout `devUser.yml`_ on github as this is unmaintained.
 
 .. code-block:: yaml
 
    name: devUser
-   description: LXD profile with nested docker and accellerated GPU support for JetBrains toolbox.
+   description: LXD profile with nested docker and accelerated GPU support for JetBrains toolbox.
    config:
      environment.LANG: en_US.UTF-8
      environment.LANGUAGE: en_US:en
@@ -241,5 +241,6 @@ devUser.yml Profile
 .. _turtles: https://www.devendortech.com/articles/Docker_in_LXD_Guest.html
 .. _prettier: https://www.devendortech.com/articles/devuser_lxd.html
 .. _github: https://github.com/devendor/turtles.git
-.. _medium: https://medium.com/@Ray.Ferguson/1193be4897b0
+.. _medium: https://medium.com/devendor-tech/devuserlxd-1193be4897b0
+.. _devUser.yml: https://raw.githubusercontent.com/devendor/turtles/master/devUser.yml
 
