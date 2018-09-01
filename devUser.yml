@@ -23,12 +23,16 @@ config:
       - apt-get install -y apt-transport-https curl
       - add-apt-repository
         "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+      - curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+      - add-apt-repository
+        "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
       - apt-get update
       - apt-get install -y
         docker-ce
         docker-compose
         vim
         git
+        gpg
         squashfuse
       - usermod -aG docker me
       - systemctl start docker
@@ -41,13 +45,23 @@ config:
         libxtst6
         libgtk-3-common
         libswt-gtk-3-java
+        google-chrome-beta
         libnvidia-gl-390  # TODO validate appropriate gl library for your env.
-      - "export DISPLAY=:0.0 XAUTHORITY=/home/me/.Xauthority"
       - nvidia-smi
+      - '$(echo "export DISPLAY=:0.0 XAUTHORITY=/home/me/.Xauthority" |
+         tee -a /home/me/.bashrc | tee -a /home/me/.bash_profile)'
+      - chown -R me:me /home/me || true
       - runuser me -c "glxinfo -B"
       - runuser me -c "glxgears -info" &
       - sleep 12
       - killall glxgears
+      - cd /usr/local/bin
+      - umask 022
+      - "for i in idea pycharm clion datagrip phpstorm webstorm goland ;
+        do ln -s jetbrains-launcher $i ;
+        done"
+      - echo '#!/bin/true' > /etc/update-motd.d/98-fsck-at-reboot
+      - reboot &
     write_files:
       - path: /etc/rsylog.conf
         content: |
@@ -73,13 +87,21 @@ config:
           ExecStart=/usr/bin/dockerd
         permissions: '0644'
         owner: root:root
-      - path: /bin/pycharm
+      - path: /usr/local/bin/jetbrains-launcher
         permissions: '0755'
         owner: root:root  # TODO Check your install path.
         content: "\
           #!/bin/bash\n\
-          exec $( ls -1c ~/.local/share/JetBrains/Toolbox/apps/\
-          PyCharm-P/ch-0/*/bin/pycharm.sh | head -1) $@\n"
+          # Runs latest version of jetbrains products installed by toolbox.\n\
+          set -e\n\
+          TBPATH=~/.local/share/JetBrains/Toolbox/apps/ \n\
+          script=$( ls -1c ${TBPATH}/*/ch-0/*/bin/`basename $0`.sh | head -1 )\n\
+          if [ -x ${script:-/dev/null} ] ; then\n\
+             exec $script $@\n\
+          else\n\
+             echo $launcher not found. Check $TBPATH\n\
+             exit 1\n\
+          fi\n"
     users:
       - name: me
         groups:
@@ -125,3 +147,16 @@ devices:  # TODO Swap in your home dir path.
     source: /home/rferguson/.local
     path: /home/me/.local
     type: disk
+  gitconf:
+    source: /home/rferguson/.gitconfig
+    path: /home/me/.gitconfig
+    type: disk
+  gitignore:
+    source: /home/rferguson/.gitconfig
+    path: /home/me/.gitignore_global
+    type: disk
+  gpg:
+    source: /home/rferguson/.gnupg
+    path: /home/me/.gnupg
+    type: disk
+
