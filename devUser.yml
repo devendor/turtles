@@ -102,10 +102,10 @@ config:
              echo $launcher not found. Check $TBPATH\n\
              exit 1\n\
           fi\n"
-      - path: /home/me/.PyCharm2018.2/config/remote-servers.xml
+      - path: /home/me/.PyCharm2018.2/config/options/remote-servers.xml
         owner: me:me
         permissions: '0660'
-        content: '\
+        content: |
           <application>
             <component name="RemoteServers">
             <remote-server name="Docker" type="docker">
@@ -115,7 +115,7 @@ config:
               </configuration>
             </remote-server>
             </component>
-          </application>'
+          </application>
     users:
       - name: me
         groups:
