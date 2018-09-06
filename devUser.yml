@@ -95,13 +95,27 @@ config:
           # Runs latest version of jetbrains products installed by toolbox.\n\
           set -e\n\
           TBPATH=~/.local/share/JetBrains/Toolbox/apps/ \n\
-          script=$( ls -1c ${TBPATH}/*/ch-0/*/bin/`basename $0`.sh | head -1 )\n\
+          script=$( ls -1c ${TBPATH}/*/ch-0/*/bin/`basename $0`.sh | tail -1 )\n\
           if [ -x ${script:-/dev/null} ] ; then\n\
              exec $script $@\n\
           else\n\
              echo $launcher not found. Check $TBPATH\n\
              exit 1\n\
           fi\n"
+        - path: /home/me/.PyCharm2018.2/config/remote-servers.xml
+          owner: me:me
+          permissions: '0660'
+          content: '\
+            <application>
+              <component name="RemoteServers">
+              <remote-server name="Docker" type="docker">
+                <configuration>
+                <option name="apiUrl" value="unix:///var/run/docker.sock" />
+                <option name="certificatesPath" />
+                </configuration>
+              </remote-server>
+              </component>
+            </application>'
     users:
       - name: me
         groups:
@@ -159,4 +173,6 @@ devices:  # TODO Swap in your home dir path.
     source: /home/rferguson/.gnupg
     path: /home/me/.gnupg
     type: disk
-
+  ideavimrc:
+    source: /home/rferguson/.ideavimrc
+    me: /home/me/.ideavimrc
