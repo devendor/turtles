@@ -175,4 +175,5 @@ devices:  # TODO Swap in your home dir path.
     type: disk
   ideavimrc:
     source: /home/rferguson/.ideavimrc
-    me: /home/me/.ideavimrc
+    path: /home/me/.ideavimrc
+    type: disk
