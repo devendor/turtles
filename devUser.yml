@@ -177,3 +177,12 @@ devices:  # TODO Swap in your home dir path.
     source: /home/rferguson/.ideavimrc
     path: /home/me/.ideavimrc
     type: disk
+  pyckey:
+    type: disk
+    source: /home/rferguson/.PyCharm2018.2/config/pycharm.key
+    path: /home/me/.PyCharm2018.2/config/pycharm.key
+  ideakey:
+    type: disk
+    source: /home/rferguson/.IntelliJIdea2018.2/config/idea.key
+    path: /home/me/.IntelliJIdea2018.2/config/idea.key
+
