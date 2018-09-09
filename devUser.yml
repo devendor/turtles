@@ -15,53 +15,8 @@ config:
     #cloud-config
     output:
       all: '| tee -a /var/log/cloud-init-output.log'
-    package_update: true
-    package_upgrade: true
-    runcmd:
-      - set -xe
-      - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-      - apt-get install -y apt-transport-https curl
-      - add-apt-repository
-        "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-      - curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
-      - add-apt-repository
-        "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
-      - apt-get update
-      - apt-get install -y
-        docker-ce
-        docker-compose
-        vim
-        git
-        gpg
-        squashfuse
-      - usermod -aG docker me
-      - systemctl start docker
-      - docker image pull hello-world
-      - docker run --rm hello-world
-      - apt-get install -y
-        x11-apps
-        mesa-utils
-        alsa-utils
-        libxtst6
-        libgtk-3-common
-        libswt-gtk-3-java
-        google-chrome-beta
-        libnvidia-gl-390  # TODO validate appropriate gl library for your env.
-      - nvidia-smi
-      - '$(echo "export DISPLAY=:0.0 XAUTHORITY=/home/me/.Xauthority" |
-         tee -a /home/me/.bashrc | tee -a /home/me/.bash_profile)'
-      - chown -R me:me /home/me || true
-      - runuser me -c "glxinfo -B"
-      - runuser me -c "glxgears -info" &
-      - sleep 12
-      - killall glxgears
-      - cd /usr/local/bin
-      - umask 022
-      - "for i in idea pycharm clion datagrip phpstorm webstorm goland ;
-        do ln -s jetbrains-launcher $i ;
-        done"
-      - echo '#!/bin/true' > /etc/update-motd.d/98-fsck-at-reboot
-      - reboot &
+    package_update: false
+    package_upgrade: false
     write_files:
       - path: /etc/rsylog.conf
         content: |
@@ -103,7 +58,6 @@ config:
              exit 1\n\
           fi\n"
       - path: /home/me/.PyCharm2018.2/config/options/remote-servers.xml
-        owner: me:me
         permissions: '0660'
         content: |
           <application>
@@ -116,6 +70,62 @@ config:
             </remote-server>
             </component>
           </application>
+      - path: "/usr/local/bin/apt-get"
+        owner: root:root
+        permissions: '0555'
+        content: "\
+          #!/bin/bash\n\
+          exec /usr/bin/flock -w 900 -F --verbose
+          /var/cache/apt/archives/lock /usr/bin/apt-get $@\n"
+    runcmd:
+      - set -xe
+      - apt-get update
+      - apt-get -y upgrade
+      - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+      - apt-get install -y apt-transport-https curl
+      - add-apt-repository
+        "deb [arch=amd64] https://download.docker.com/linux/ubuntu
+        $(lsb_release -cs) stable"
+      - curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+      - add-apt-repository
+        "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+      - apt-get update
+      - apt-get install -y
+        docker-ce
+        docker-compose
+        vim
+        git
+        gpg
+        squashfuse
+      - usermod -aG docker me
+      - systemctl start docker
+      - docker image pull hello-world
+      - docker run --rm hello-world
+      - apt-get install -y
+        x11-apps
+        mesa-utils
+        alsa-utils
+        libxtst6
+        libgtk-3-common
+        libswt-gtk-3-java
+        google-chrome-beta
+        libnvidia-gl-390  # TODO validate appropriate gl library for your env.
+      - nvidia-smi
+      - '$(echo "export DISPLAY=:0.0 XAUTHORITY=/home/me/.Xauthority" |
+         tee -a /home/me/.bashrc | tee -a /home/me/.bash_profile)'
+      - chown -R me:me /home/me || true
+      - runuser me -c "glxinfo -B"
+      - runuser me -c "glxgears -info" &
+      - sleep 12
+      - killall glxgears
+      - cd /usr/local/bin
+      - umask 022
+      - "for i in idea pycharm clion datagrip phpstorm webstorm goland ;
+        do ln -s jetbrains-launcher $i ;
+        done"
+      - echo '#!/bin/true' > /etc/update-motd.d/98-fsck-at-reboot
+      - reboot &
+
     users:
       - name: me
         groups:
@@ -188,4 +198,8 @@ devices:  # TODO Swap in your home dir path.
   npmcache:
     source: /vdata/cache/npm
     path: /home/me/.npm
+    type: disk
+  share:
+    source: /vdata/share
+    path: /home/me/share
     type: disk
