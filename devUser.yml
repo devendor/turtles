@@ -176,7 +176,7 @@ devices:  # TODO Swap in your home dir path.
     path: /home/me/.gitconfig
     type: disk
   gitignore:
-    source: /home/rferguson/.gitconfig
+    source: /home/rferguson/.gitignore_global
     path: /home/me/.gitignore_global
     type: disk
   gpg:
