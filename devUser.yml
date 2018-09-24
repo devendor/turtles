@@ -49,8 +49,8 @@ config:
           #!/bin/bash\n\
           # Runs latest version of jetbrains products installed by toolbox.\n\
           set -e\n\
-          TBPATH=~/.local/share/JetBrains/Toolbox/apps/ \n\
-          script=$( ls -1c ${TBPATH}/*/ch-0/*/bin/`basename $0`.sh | tail -1 )\n\
+          JB=~/.local/share/JetBrains/Toolbox/apps/ \n\
+          script=$(ls ${JB}/*/ch-0/*/bin/`basename $0`.sh | sort | tail -1)\n\
           if [ -x ${script:-/dev/null} ] ; then\n\
              exec $script $@\n\
           else\n\
@@ -109,6 +109,9 @@ config:
         libgtk-3-common
         libswt-gtk-3-java
         google-chrome-beta
+        openjdk-8-jdk
+        openjdk-8-dbg
+        openjdk-8-doc
         libnvidia-gl-390  # TODO validate appropriate gl library for your env.
       - nvidia-smi
       - '$(echo "export DISPLAY=:0.0 XAUTHORITY=/home/me/.Xauthority" |
@@ -182,6 +185,10 @@ devices:  # TODO Swap in your home dir path.
   gpg:
     source: /home/rferguson/.gnupg
     path: /home/me/.gnupg
+    type: disk
+  gradlehome:
+    source: /home/rferguson/.gradle
+    path: /home/me/.gradle
     type: disk
   ideavimrc:
     source: /home/rferguson/.ideavimrc
