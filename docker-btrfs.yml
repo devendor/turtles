@@ -29,7 +29,7 @@ config:
       - docker image pull hello-world
       - docker run --rm hello-world
     write_files:
-      - path: /etc/rsylog.conf
+      - path: /etc/rsyslog.conf
         content: |
           module(load="imuxsock")
           *.* @log.virtdmz
