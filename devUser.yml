@@ -8,7 +8,7 @@ config:
   nvidia.runtime: "true"  # TODO only if you have an nvidia GPU.
   raw.idmap: |  # TODO Set your UID/GID
     both 1000 1000
-  linux.kernel_modules: ip_tables,btrfs
+  linux.kernel_modules: ip_tables,btrfs,overlay
   security.nesting: "true"
   security.privileged: "false"
   user.user-data: |-
@@ -28,7 +28,7 @@ config:
         content: |
           {
             "hosts": [
-                "fd://",
+                "unix://",
                 "tcp://0.0.0.0:2345"
             ],
             "storage-driver": "btrfs"
@@ -40,6 +40,13 @@ config:
           [Service]
           ExecStart=
           ExecStart=/usr/bin/dockerd
+        permissions: '0644'
+        owner: root:root
+      - path: /etc/systemd/system/containerd.service.d/override.conf
+        content: |
+          [Service]
+          ExecStartPre=
+          ExecStartPre=/bin/true
         permissions: '0644'
         owner: root:root
       - path: /usr/local/bin/jetbrains-launcher
