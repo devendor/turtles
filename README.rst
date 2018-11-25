@@ -837,6 +837,16 @@ behind a tool with more use cases beyond container initialization.
 That said, between ansible, lxd, and cloud-init, there is pretty good momentum behind yaml defined
 automation which can quickly develop as a core skill on a devops team.
 
+Update `containerd`_
+--------------------
+
+The latest devUser.yml file `on github`_ has a couple of fixes for updated versions of docker-ce.
+Newer version try to use modprobe to load overlay before starting containerd which doesn't work and 
+the listen fd:// argument appears to be deprecated in favor of unix:// in dockerd's config.
+
+There are serveral other minor changes as devUser is actively used, but those changes are not being
+back ported to the other profiles referenced here. If you run into issues, it's a good idea to check
+the lates devUser.yml for a potential fix.
 
 .. _article regarding Docker in LXD: https://stgraber.org/2016/04/13/lxd-2-0-docker-in-lxd-712/
 .. _snapcraft: https://docs.snapcraft.io/core/install
@@ -866,3 +876,4 @@ automation which can quickly develop as a core skill on a devops team.
 .. _on github: https://github.com/devendor/turtles.git
 .. _on Devendor Tech: https://devendortech.com/articles/Docker_in_LXD_Guest.html
 .. _on Medium: https://medium.com/devendor-tech/turtles-2ccf91c86853
+.. _containerd: https://blog.docker.com/2017/08/what-is-containerd-runtime/
