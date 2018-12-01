@@ -1,0 +1,236 @@
+name: devXenial
+description: LXD profile with nested docker and accelerated GPU support for JetBrains
+  toolbox. Modified version of devUser supports Xenial guest (16.04LTS) in Bionic
+  18.04 (host).
+config:
+  environment.DISPLAY: :0.0
+  environment.LANG: en_US.UTF-8
+  environment.LANGUAGE: en_US:en
+  environment.XAUTHORITY: /home/me/.Xauthority
+  linux.kernel_modules: ip_tables,btrfs,overlay
+  nvidia.runtime: "true"
+  raw.idmap: |
+    both 1000 1000
+  security.nesting: "true"
+  security.privileged: "false"
+  user.user-data: |-
+    #cloud-config
+    output:
+      all: '| tee -a /var/log/cloud-init-output.log'
+    package_update: false
+    package_upgrade: false
+    write_files:
+      - path: /etc/rsylog.conf
+        content: |
+          module(load="imuxsock")
+          *.* @log.virtdmz
+        owner: root:root
+        permissions: '0644'
+      - path: /etc/docker/daemon.json
+        content: |
+          {
+            "hosts": [
+                "unix://",
+                "tcp://0.0.0.0:2345"
+            ],
+            "storage-driver": "btrfs"
+          }
+        permissions: '0644'
+        owner: root:root
+      - path: /etc/systemd/system/docker.service.d/override.conf
+        content: |
+          [Service]
+          ExecStart=
+          ExecStart=/usr/bin/dockerd
+        permissions: '0644'
+        owner: root:root
+      - path: /etc/systemd/system/containerd.service.d/override.conf
+        content: |
+          [Service]
+          ExecStartPre=
+          ExecStartPre=/bin/true
+        permissions: '0644'
+        owner: root:root
+      - path: /usr/local/bin/jetbrains-launcher
+        permissions: '0755'
+        owner: root:root  # TODO Check your install path.
+        content: "\
+          #!/bin/bash\n\
+          # Runs latest version of jetbrains products installed by toolbox.\n\
+          set -e\n\
+          JB=~/.local/share/JetBrains/Toolbox/apps/ \n\
+          script=$(ls ${JB}/*/ch-0/*/bin/`basename $0`.sh | sort | tail -1)\n\
+          if [ -x ${script:-/dev/null} ] ; then\n\
+             exec $script $@\n\
+          else\n\
+             echo $launcher not found. Check $TBPATH\n\
+             exit 1\n\
+          fi\n"
+      - path: /home/me/.PyCharm2018.2/config/options/remote-servers.xml
+        permissions: '0660'
+        content: |
+          <application>
+            <component name="RemoteServers">
+            <remote-server name="Docker" type="docker">
+              <configuration>
+              <option name="apiUrl" value="unix:///var/run/docker.sock" />
+              <option name="certificatesPath" />
+              </configuration>
+            </remote-server>
+            </component>
+          </application>
+      - path: "/usr/local/bin/apt-get"
+        owner: root:root
+        permissions: '0555'
+        content: "\
+          #!/bin/bash\n\
+          (\n\
+          /usr/bin/flock -w 900 --verbose 9 || exit 101\n\
+          exec /usr/bin/apt-get $@\n\
+          ) 9>/var/cache/apt/archives/lock\n"
+    runcmd:
+      - set -xe
+      - apt-get update
+      - apt-get -y upgrade
+      - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+      - apt-get install -y apt-transport-https curl
+      - add-apt-repository
+        "deb [arch=amd64] https://download.docker.com/linux/ubuntu
+        $(lsb_release -cs) stable"
+      - curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+      - add-apt-repository
+        "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+      - add-apt-repository
+        "deb [arch=amd64] https://github.com/devendor/turtles/ xenial-compat"
+      - apt-get update
+      - apt-get install -y
+        docker-ce
+        docker-compose
+        vim
+        git
+        gpgv2
+        squashfuse
+      - usermod -aG docker me
+      - systemctl start docker
+      - docker image pull hello-world
+      - docker run --rm hello-world
+      - apt-get install -y
+        libgl1
+				libgl1-mesa-glx
+				libglapi-mesa
+				libglvnd0
+				libglx0
+				libglx-mesa0
+				libnvidia-common-390
+				libnvidia-gl-390
+				libxcb-glx0
+				mesa-utils
+				x11-utils
+        x11-apps
+        alsa-utils
+        libxtst6
+        libgtk-3-common
+        libswt-gtk-3-java
+        google-chrome-beta
+        openjdk-8-jdk
+        openjdk-8-dbg
+        openjdk-8-doc
+      - nvidia-smi
+      - '$(echo "export DISPLAY=:0.0 XAUTHORITY=/home/me/.Xauthority" |
+         tee -a /home/me/.bashrc | tee -a /home/me/.bash_profile)'
+      - chown -R me:me /home/me || true
+      - runuser me -c "glxinfo -B"
+      - runuser me -c "glxgears -info" &
+      - sleep 12
+      - killall glxgears
+      - cd /usr/local/bin
+      - umask 022
+      - "for i in idea pycharm clion datagrip phpstorm webstorm goland ;
+        do ln -s jetbrains-launcher $i ;
+        done"
+      - echo '#!/bin/true' > /etc/update-motd.d/98-fsck-at-reboot
+      - reboot &
+
+    users:
+      - name: me
+        groups:
+          - adm
+        lock_passwd: true
+        shell: /bin/bash
+        uid: 1000  # TODO Swap to your numeric UID/GID
+        gid: 1000
+        ssh-authorized-keys:  # TODO Add your own keys
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPS4YhPW5BkRbYkazwX7s0bFcFefVv30\
+            l5qXA0oxWKxM3vlN8eAinmU8ejZ7PgdpzLLnhgm3Kt8HrLYdWzYjoRCeF9Fp+fMcU8KL7I\
+            s4KOrCSPKodHOIlV3AtqmNtb9zTwiwCHqPkY9JeaWfiXe2c675jOA5ZkMsaHuaEjbqCYgd\
+            I6boQJI7S/haPFzWDr/rbkijjw87t9nh3NP1Oy11QDqavqzjURyika1eBsHKAheBHkVUgt\
+            oUu43rMsGLjL/gyD5XNJntdSuENYWH rferguson@booger"
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8hW43gyNrayfJwjxZ80HKWboRvpDRnS\
+            LhEKGwDfBqfx5aaF67mmIhOE+fsUTed1Odoqo5iprQYEWoTSA6C2RX9G9BBoUVCiA7DMIf\
+            dBTfJ5G3mO1I8ZZazttQ2qp5/e9z4mpYzL410YZyZ6XrgWoazQpDGdb2pkSmADo8jc/rED\
+            yM+ZWRBNDOS4gxUPk5oy8HbpZmK380JYvvGNSZCj4QSe5IZa/bQx6NL88mEF/+BHEW6JFw\
+            +Awv7c1+GHDL5iYQnTAY+XG1BQdDwuziRFm8eWPYamgUd+4JKptcf1gW6W1EnIQ2i4OR2L\
+            R1/BIXwG0FMfs3gJlM1Wbh/giYSt8p rferguson@mendota"
+          - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCg51sNuYolkEw52oIKw3OKzlso2UyS0h\
+            0+R9t5wQYGMk6SfS0PHFd6epwWP1aHnJJnyLIZGPB/qaiWz4dTJEhl5eRaBO0ca6/SbMCu\
+            wjCCE/6IMPphj79v14hXfOG42dF/wZN3AF2VJwI3xVcxAyEkEIgAb79X4wUO2nN6xli5ET\
+            Q+YxPVfxD8+A0B1p25Ef1NdnUdGHOBCkpV4rgcO2fLQHIspMlL/JDJ9CUyCvy5XM7elN37\
+            iOdEUysGCavTcA0MeUxjkFdyzJt+MNVve4t+hOF6p/HnIvhcGxME6CQRyX3rM5bPbWy1ER\
+            e7BXJmg4SZmG5QccaTzqcCBJyFTJDX rferguson@c302ca"
+        sudo:
+          - ALL=(ALL) NOPASSWD:ALL
+devices:
+  Xauthority:
+    path: /home/me/.Xauthority
+    source: /home/rferguson/.Xauthority
+    type: disk
+  aptcache:
+    path: /var/cache/apt
+    source: /vdata/cache/aptx
+    type: disk
+  gitconf:
+    path: /home/me/.gitconfig
+    source: /home/rferguson/.gitconfig
+    type: disk
+  gitignore:
+    path: /home/me/.gitignore_global
+    source: /home/rferguson/.gitignore_global
+    type: disk
+  gpg:
+    path: /home/me/.gnupg
+    source: /home/rferguson/.gnupg
+    type: disk
+  gradlehome:
+    path: /home/me/.gradle
+    source: /home/rferguson/.gradle
+    type: disk
+  ideavimrc:
+    path: /home/me/.ideavimrc
+    source: /home/rferguson/.ideavimrc
+    type: disk
+  melocal:
+    path: /home/me/.local
+    source: /home/rferguson/.local
+    type: disk
+  npmcache:
+    path: /home/me/.npm
+    source: /vdata/cache/npm
+    type: disk
+  nvgpu:
+    gid: "0"
+    type: gpu
+    uid: "0"
+  pipcache:
+    path: /home/me/.cache/pip
+    source: /vdata/cache/pip
+    type: disk
+  share:
+    path: /home/me/share
+    source: /vdata/share
+    type: disk
+  x11:
+    path: /tmp/.X11-unix/X0
+    source: /tmp/.X11-unix/X0
+    type: disk
+used_by:
+- /1.0/containers/t331
