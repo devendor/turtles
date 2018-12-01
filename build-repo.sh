@@ -1,6 +1,7 @@
 #!/bin/bash
 set -xe
-REPO_DIR=$(dirname $(readlink -f $0))/xenial-compat
+GIT_DIR=$(dirname $(readlink -f $0))
+REPO_DIR=${GIT_DIR}/xenial-compat
 PACKAGES=(
     libgl1
     libgl1-mesa-glx
@@ -16,11 +17,13 @@ PACKAGES=(
 )
 
 if [ -d ${REPO_DIR} ] ; then
-    rm -rf ${REPO_DIR};
+    git rm -rf ${REPO_DIR} || rm -rf ${REPO_DIR}
 fi
 
-mkdir ${REPO_DIR}
-cd ${REPO_DIR}
+mkdir -p ${REPO_DIR}/amd64
+
+cd ${REPO_DIR}/amd64
 apt-get download -y "${PACKAGES[@]}"
-apt-ftparchive packages . | gzip - > Packages.gz
+cd ${GIT_DIR}
+apt-ftparchive packages $(basename ${REPO_DIR})/amd64 | gzip - > ${REPO_DIR}/amd64/Packages.gz
 

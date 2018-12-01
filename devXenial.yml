@@ -101,7 +101,7 @@ config:
       - add-apt-repository
         "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
       - add-apt-repository
-        "deb [arch=amd64] https://github.com/devendor/turtles/ xenial-compat"
+        "deb https://github.com/devendor/turtles/ xenial-compat/"
       - apt-get update
       - apt-get install -y
         docker-ce
@@ -116,16 +116,16 @@ config:
       - docker run --rm hello-world
       - apt-get install -y
         libgl1
-				libgl1-mesa-glx
-				libglapi-mesa
-				libglvnd0
-				libglx0
-				libglx-mesa0
-				libnvidia-common-390
-				libnvidia-gl-390
-				libxcb-glx0
-				mesa-utils
-				x11-utils
+        libgl1-mesa-glx
+        libglapi-mesa
+        libglvnd0
+        libglx0
+        libglx-mesa0
+        libnvidia-common-390
+        libnvidia-gl-390
+        libxcb-glx0
+        mesa-utils
+        x11-utils
         x11-apps
         alsa-utils
         libxtst6
