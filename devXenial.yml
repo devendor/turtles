@@ -101,7 +101,7 @@ config:
       - add-apt-repository
         "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
       - add-apt-repository
-        "deb https://github.com/devendor/turtles/ xenial-compat/"
+        "deb https://github.com/devendor turtles xenial-compat"
       - apt-get update
       - apt-get install -y
         docker-ce
