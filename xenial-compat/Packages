@@ -9,7 +9,7 @@ Maintainer: Ubuntu X-SWAT <ubuntu-x@lists.ubuntu.com>
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Installed-Size: 65
 Depends: libgl1, libglx-mesa0
-Filename: binary-amd64/libgl1-mesa-glx_18.0.5-0ubuntu0~18.04.1_amd64.deb
+Filename: xenial-compat/binary-amd64/libgl1-mesa-glx_18.0.5-0ubuntu0~18.04.1_amd64.deb
 Size: 3780
 MD5sum: e84d4cd0292419f670141779b00c1436
 SHA1: 2e76fbb542f1a0cbda8cb6749f556c7aa29b8b43
@@ -32,7 +32,7 @@ Installed-Size: 671
 Depends: libc6 (>= 2.14), libglvnd0 (= 1.0.0-2ubuntu2.2), libglx0 (= 1.0.0-2ubuntu2.2)
 Breaks: glx-diversions (<< 0.8), libgl1-mesa-glx (<< 18.0.5-0ubuntu0~18.04), libglvnd0 (<< 0.2.999+git20170201-1)
 Replaces: libgl1-mesa-glx (<< 18.0.5-0ubuntu0~18.04), libglvnd0 (<< 0.2.999+git20170201-1)
-Filename: binary-amd64/libgl1_1.0.0-2ubuntu2.2_amd64.deb
+Filename: xenial-compat/binary-amd64/libgl1_1.0.0-2ubuntu2.2_amd64.deb
 Size: 84812
 MD5sum: ceda62f36cdcb28930699e4ec5b8674d
 SHA1: 8ab6985e1dafece29e1e376f2e3604082e73a5e8
@@ -56,7 +56,7 @@ Maintainer: Ubuntu X-SWAT <ubuntu-x@lists.ubuntu.com>
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Installed-Size: 264
 Depends: libc6 (>= 2.14)
-Filename: binary-amd64/libglapi-mesa_18.0.5-0ubuntu0~18.04.1_amd64.deb
+Filename: xenial-compat/binary-amd64/libglapi-mesa_18.0.5-0ubuntu0~18.04.1_amd64.deb
 Size: 23728
 MD5sum: fc56c7c44c73a2e94f3825ec9b77c674
 SHA1: 84277a960e04792893acd138bd26dac8ca0651ad
@@ -81,7 +81,7 @@ Installed-Size: 624
 Depends: libc6 (>= 2.14)
 Breaks: libgldispatch0-nvidia
 Replaces: libgldispatch0-nvidia
-Filename: binary-amd64/libglvnd0_1.0.0-2ubuntu2.2_amd64.deb
+Filename: xenial-compat/binary-amd64/libglvnd0_1.0.0-2ubuntu2.2_amd64.deb
 Size: 46636
 MD5sum: 46cbcecaabebb20ed0481c15d124d93f
 SHA1: f9550fdcd9e8bd5214d5dfbe855fd3ef6543be35
@@ -107,7 +107,7 @@ Installed-Size: 567
 Provides: libglx-vendor
 Depends: libc6 (>= 2.14), libdrm2 (>= 2.4.75), libexpat1 (>= 2.0.1), libglapi-mesa (= 18.0.5-0ubuntu0~18.04.1), libx11-6 (>= 2:1.4.99.1), libx11-xcb1, libxcb-dri2-0 (>= 1.8), libxcb-dri3-0, libxcb-glx0 (>= 1.8), libxcb-present0, libxcb-sync1, libxcb1 (>= 1.9.2), libxdamage1 (>= 1:1.1), libxext6, libxfixes3, libxshmfence1, libxxf86vm1, zlib1g (>= 1:1.1.4), libgl1-mesa-dri
 Breaks: libopengl-perl (<< 0.6704+dfsg-2), nvidia-304, nvidia-340 (<= 340.106-0ubuntu1), nvidia-384 (<< 390.25)
-Filename: binary-amd64/libglx-mesa0_18.0.5-0ubuntu0~18.04.1_amd64.deb
+Filename: xenial-compat/binary-amd64/libglx-mesa0_18.0.5-0ubuntu0~18.04.1_amd64.deb
 Size: 131564
 MD5sum: d529ba946e592703f5d72d43ecc3ef33
 SHA1: 487f803691fb901f8dd657b34fa016ba8d09b87d
@@ -142,7 +142,7 @@ Installed-Size: 90
 Depends: libc6 (>= 2.14), libglvnd0 (= 1.0.0-2ubuntu2.2), libx11-6 (>= 2:1.4.99.1), libglx-mesa0
 Breaks: libgl1-mesa-glx (<< 18.0.5-0ubuntu0~18.04), libglvnd0 (<< 0.2.999+git20170201-1)
 Replaces: libgl1-mesa-glx (<< 18.0.5-0ubuntu0~18.04), libglvnd0 (<< 0.2.999+git20170201-1)
-Filename: binary-amd64/libglx0_1.0.0-2ubuntu2.2_amd64.deb
+Filename: xenial-compat/binary-amd64/libglx0_1.0.0-2ubuntu2.2_amd64.deb
 Size: 28076
 MD5sum: 014dacf67ee9e3ac2e506ca91a8a963a
 SHA1: 9b374bfe7e18a767567e26b1f4278125341bb6e5
@@ -167,7 +167,7 @@ Installed-Size: 34
 Provides: libnvidia-common
 Breaks: libnvidia-gl-390 (<< 390.25-0ubuntu2~)
 Replaces: libnvidia-common, libnvidia-gl-390 (<< 390.25-0ubuntu2~)
-Filename: binary-amd64/libnvidia-common-390_390.77-0ubuntu0.18.04.1_all.deb
+Filename: xenial-compat/binary-amd64/libnvidia-common-390_390.77-0ubuntu0.18.04.1_all.deb
 Size: 11332
 MD5sum: ce63b6f64d5aaa575cb841a4f68d3987
 SHA1: 8c32a976204f51cfdf0c9545065e148e8e6a4417
@@ -191,7 +191,7 @@ Provides: libegl-vendor, libglx-vendor, libnvidia-gl
 Depends: libnvidia-common-390, libc6 (>= 2.2.5), libwayland-client0 (>= 1.3.92), libwayland-server0 (>= 1.2.0), libx11-6, libxext6
 Conflicts: libnvidia-gl
 Replaces: libnvidia-gl, nvidia-384 (<< 390.25), nvidia-390 (<< 390.25-0ubuntu1)
-Filename: binary-amd64/libnvidia-gl-390_390.77-0ubuntu0.18.04.1_amd64.deb
+Filename: xenial-compat/binary-amd64/libnvidia-gl-390_390.77-0ubuntu0.18.04.1_amd64.deb
 Size: 14294212
 MD5sum: 4ebe9928638c599bd2b56721724f7bfa
 SHA1: e71e3a54ded22e7aab75180897938b3cabd93c1d
@@ -213,7 +213,7 @@ Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Installed-Size: 150
 Depends: libc6 (>= 2.4), libxcb1
-Filename: binary-amd64/libxcb-glx0_1.13-1_amd64.deb
+Filename: xenial-compat/binary-amd64/libxcb-glx0_1.13-1_amd64.deb
 Size: 22040
 MD5sum: 2cea313bdb62d4a39c10fc0cb986314c
 SHA1: 4401d74f29fd3f8102bf7a321c2e0d04a43c2bee
@@ -245,7 +245,7 @@ Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Installed-Size: 134
 Depends: libc6 (>= 2.14), libgl1, libx11-6
-Filename: binary-amd64/mesa-utils_8.4.0-1_amd64.deb
+Filename: xenial-compat/binary-amd64/mesa-utils_8.4.0-1_amd64.deb
 Size: 34268
 MD5sum: 73d4d3c750cee68b31d903f05064ca63
 SHA1: ae1a0eba6e0eb66acfa50f78217fc771e2c0484e
@@ -267,7 +267,7 @@ Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Installed-Size: 635
 Depends: libc6 (>= 2.15), libfontconfig1 (>= 2.11.94), libfontenc1, libgl1-mesa-glx | libgl1, libx11-6, libx11-xcb1, libxaw7, libxcb-shape0, libxcb1 (>= 1.6), libxcomposite1 (>= 1:0.3-1), libxext6, libxft2 (>> 2.1.1), libxi6, libxinerama1, libxmu6, libxmuu1, libxrandr2 (>= 2:1.2.0), libxrender1, libxt6, libxtst6, libxv1, libxxf86dga1, libxxf86vm1
 Suggests: mesa-utils
-Filename: binary-amd64/x11-utils_7.7+3build1_amd64.deb
+Filename: xenial-compat/binary-amd64/x11-utils_7.7+3build1_amd64.deb
 Size: 195676
 MD5sum: 1ac78c093731291df7824f4d4e1f2280
 SHA1: 842cd5c802383f319994f4f79327cb63529cb294
