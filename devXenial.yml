@@ -100,8 +100,11 @@ config:
       - curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
       - add-apt-repository
         "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
-      - add-apt-repository
-        "deb https://github.com/devendor turtles xenial-compat"
+      - curl -fsSL
+        https://raw.githubusercontent.com/devendor/turtles/master/xenial-compat/gpg.key |
+        apt-key add -
+      - apt-add-repository
+        "deb  https://raw.githubusercontent.com/devendor/turtles/master xenial-compat/"
       - apt-get update
       - apt-get install -y
         docker-ce
